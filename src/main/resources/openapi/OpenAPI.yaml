@@ -118,7 +118,7 @@ components:
         produto_id:
           type: string
           example: 'PS5'
-        dimensoes:
+        dimension:
           $ref: "#/components/schemas/DimensionRequest"
     DimensionRequest:
       type: object
@@ -134,9 +134,6 @@ components:
           example: 25
     ProductBoxResponse:
       type: object
-      required:
-        - caixa_id
-        - produtos
       properties:
         caixa_id:
           type: string
