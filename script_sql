@@ -1,0 +1,32 @@
+Quantidade de horas que cada professor tem comprometido em aulas:
+
+SELECT
+    p.id AS professor_id,
+    p.name AS professor_name,
+    SUM(TIMESTAMPDIFF(HOUR, cs.start_time, cs.end_time)) AS total_hours
+FROM
+    PROFESSOR p
+INNER JOIN
+    SUBJECT s ON p.id = s.taught_by
+INNER JOIN
+    CLASS c ON s.id = c.subject_id
+INNER JOIN
+    CLASS_SCHEDULE cs ON c.id = cs.class_id
+GROUP BY
+    p.id, p.name;
+
+---------
+
+Lista de salas com horários livres e ocupados:
+
+SELECT r.id AS room_id, r.name AS room_name,
+       CASE
+           WHEN cs.id IS NOT NULL THEN 'Ocupado'
+           ELSE 'Livre'
+       END AS status,
+       cs.day_of_week,
+       cs.start_time,
+       cs.end_time
+FROM ROOM r
+LEFT JOIN CLASS_SCHEDULE cs ON r.id = cs.room_id
+ORDER BY r.id, cs.day_of_week, cs.start_time;
