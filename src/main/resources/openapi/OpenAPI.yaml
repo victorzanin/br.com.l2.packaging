@@ -1,0 +1,167 @@
+openapi: 3.0.4
+info:
+  title: Swagger L2 - OpenAPI 3.0
+  termsOfService: https://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.12
+externalDocs:
+  description: Find out more about Swagger
+  url: https://swagger.io
+tags:
+  - name: PackagingOrders
+    description: Everything about your Pets
+    externalDocs:
+      description: Find out more
+      url: https://swagger.io
+paths:
+  /orders:
+    post:
+      tags:
+        - PackagingOrders
+      summary: Send your orders to verify box.
+      description: Send your orders with your products, specify the size of each product, and I will let you know which box should be used for packaging.
+      operationId: checkPackage
+      requestBody:
+        description: Send the request body as shown in the example below..
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: |
+            **Bad Request**
+            
+            This endpoint can throw the following errors:
+            * `[{ "code": "400", "message": "Bad Request" }]`
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorModel'
+        '404':
+          description: |
+            **Not Found**
+            
+            This endpoint can throw the following errors:
+            * `[{ "code": "404", "message": "Product not found." }]`
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorModel'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ErrorModel"
+components:
+  schemas:
+    OrderRequest:
+      type: object
+      properties:
+        pedidos:
+          $ref: "#/components/schemas/OrdersRequest"
+    OrdersRequest:
+      type: array
+      items:
+        $ref: "#/components/schemas/OrderDetailsRequest"
+    OrderResponse:
+      type: object
+      properties:
+        pedidos:
+          $ref: "#/components/schemas/OrdersResponse"
+    OrdersResponse:
+      type: array
+      items:
+        $ref: "#/components/schemas/OrderDetailsResponse"
+    OrderDetailsRequest:
+      type: object
+      properties:
+        pedido_id:
+          type: integer
+          format: int32
+          example: 1
+        produtos:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductRequest"
+    OrderDetailsResponse:
+      type: object
+      properties:
+        pedido_id:
+          type: integer
+          format: int32
+          example: 1
+        caixas:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductBoxResponse"
+    ProductRequest:
+      type: object
+      properties:
+        produto_id:
+          type: string
+          example: 'PS5'
+        dimensoes:
+          $ref: "#/components/schemas/DimensionRequest"
+    DimensionRequest:
+      type: object
+      properties:
+        altura:
+          type: integer
+          example: 40
+        largura:
+          type: integer
+          example: 10
+        comprimento:
+          type: integer
+          example: 25
+    ProductBoxResponse:
+      type: object
+      required:
+        - caixa_id
+        - produtos
+      properties:
+        caixa_id:
+          type: string
+          example: 'Caixa 2'
+        produtos:
+          type: array
+          items:
+            type: string
+            example: ['PS5', 'VOLANTE']
+        observacao:
+          type: string
+          example: ''
+    ErrorModel:
+      type: object
+      properties:
+        code:
+          type: string
+          example: '01'
+        message:
+          type: string
+          example: 'Message reference code error.'
+
+
+
+
+
+
+
